@@ -16,6 +16,6 @@ USER client
 # Install external dependencies.
 RUN chmod +x scripts/setup.sh
 RUN ./scripts/setup.sh
-
+RUN chown -R client:client /app/output
 # Command to run the simulation.
 ENTRYPOINT [ "/app/.venv/bin/python" ]
