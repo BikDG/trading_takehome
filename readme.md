@@ -39,25 +39,28 @@ This project is a trading simulation engine that emulates a dynamic, concurrent 
 ### Local Development
 
 1. **Create and Activate a Virtual Environment**  
-```
-python3 -m venv .venv
-source .venv/bin/activate
-``` 
+   ```
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ``` 
 2. **Install Dependencies**
-```
-pip install -r scripts/requirements.txt
-```
+   ```
+   pip install -r scripts/requirements.txt
+   ```
 3. **Run the Simulation**
-```
-python main.py
-```
+   ```
+   python main.py
+   ```
 
 ### Docker Deployment
-
-1. **Build and Run the Container**
-```
-docker-compose up --build
-```
+1. **First Time Setup**
+   ```
+   chmod -R 777 output
+   ```
+2. **Build and Run the Container**
+   ```
+   docker-compose up --build
+   ```
 
 ## Project Workflow
 - Trading Engine (engine.py): Manages order books, order placement, matching, and trade history.
