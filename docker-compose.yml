@@ -1,0 +1,18 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  trading:
+    build: .
+    container_name: trading_simulation
+    volumes:
+      - output:/app/output
+    command: main.py
+
+volumes:
+  output:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./output
+      o: bind
