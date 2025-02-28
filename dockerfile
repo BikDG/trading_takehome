@@ -5,6 +5,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy all files from your local directory to the container.
+COPY output /app/output
 COPY ./scripts /app/scripts
 COPY ./*.py /app/
 
