@@ -3,14 +3,19 @@ version: '3.8'
 
 services:
   trading:
-    build: .
+    build:
+      context: .
+      args:
+        POOL_SIZE: ${POOL_SIZE:-200}
+        SIMULATION_DURATION: ${SIMULATION_DURATION:-120}
+        NUM_PRODUCTS: ${NUM_PRODUCTS:-10}
     container_name: trading_simulation
     volumes:
       - output:/app/output
     environment:
-      POOL_SIZE: "250"
-      SIMULATION_DURATION: "10"
-      NUM_PRODUCTS: "15"
+      POOL_SIZE: ${POOL_SIZE:-200}
+      SIMULATION_DURATION: ${SIMULATION_DURATION:-120}
+      NUM_PRODUCTS: ${NUM_PRODUCTS:-10}
     command: ["/app/.venv/bin/python main.py | tee /app/output/trading-$(date +'%Y%m%d_%H%M%S').log"]
 
 volumes:
