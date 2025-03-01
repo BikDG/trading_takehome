@@ -7,7 +7,11 @@ services:
     container_name: trading_simulation
     volumes:
       - output:/app/output
-    command: main.py
+    environment:
+      POOL_SIZE: "250"
+      SIMULATION_DURATION: "10"
+      NUM_PRODUCTS: "15"
+    command: ["/app/.venv/bin/python main.py | tee /app/output/trading-$(date +'%Y%m%d_%H%M%S').log"]
 
 volumes:
   output:

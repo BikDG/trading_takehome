@@ -5,18 +5,22 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy all files from your local directory to the container.
-COPY output /app/output
 COPY ./scripts /app/scripts
 COPY ./*.py /app/
 
+#Create output folder
+RUN mkdir /app/output
+
+#Create client user and switch to it
 RUN useradd -u 1001 -m client
 RUN chown -R client:client /app
-
 USER client
 
 # Install external dependencies.
 RUN chmod +x scripts/setup.sh
 RUN ./scripts/setup.sh
 RUN chown -R client:client /app/output
+
 # Command to run the simulation.
-ENTRYPOINT [ "/app/.venv/bin/python" ]
+ENTRYPOINT ["bash", "-c"]
+CMD ["/app/.venv/bin/python main.py | tee /app/output/trading.log"]

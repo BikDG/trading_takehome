@@ -61,6 +61,8 @@ This project is a trading simulation engine that emulates a dynamic, concurrent 
    ```
    docker-compose up --build
    ```
+   Note that you can change the `POOL_SIZE`, `SIMULATION_DURATION`, and `NUM_PRODUCTS` in the docker-compose.yml file.
+   If these are not set, the simulation will default to 200 bots, 120 seconds, and 10 random products.
 
 ## Project Workflow
 - Trading Engine (engine.py): Manages order books, order placement, matching, and trade history.
