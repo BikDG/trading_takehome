@@ -1,9 +1,8 @@
 """
 Visualization module to plot the trade history.
 """
-
-import matplotlib.pyplot as plt
 import time
+import matplotlib.pyplot as plt
 
 def visualize_all_commodities(engine):
     """
