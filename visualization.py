@@ -1,8 +1,14 @@
-# visualization.py
+"""
+Visualization module to plot the trade history.
+"""
+
 import matplotlib.pyplot as plt
 import time
 
 def visualize_all_commodities(engine):
+    """
+    Generate a plot of trade history for all commodities and save it to a file.
+    """
     plt.figure(figsize=(12, 6))
     for commodity, trades in engine.trade_history.items():
         if trades:
@@ -14,5 +20,4 @@ def visualize_all_commodities(engine):
     plt.title("Trade History for All Commodities Over the Simulation")
     plt.legend()
     plt.tight_layout()
-    time_sec = time.time()
-    plt.savefig(f'output/trade_history{time_sec}.png')
+    plt.savefig(f'output/trade_history_{int(time.time())}.png')

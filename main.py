@@ -1,23 +1,28 @@
-# main.py
+"""
+Main entry point for the trading simulation.
+Reads simulation parameters from environment variables.
+"""
+
 import time
 import threading
+import os
 from engine import TradingEngine
 from auction import AuctionManager, Auction
 from utils import generate_random_product_names, create_random_bot
 from visualization import visualize_all_commodities
-import os
 
 POOL_SIZE = int(os.environ.get("POOL_SIZE", "200"))
 SIMULATION_DURATION = int(os.environ.get("SIMULATION_DURATION", "120"))
 NUM_PRODUCTS = int(os.environ.get("NUM_PRODUCTS", "10"))
 
-# Global flag to control simulation runtime.
 simulation_running = True
 
 def simulation_running_func():
+    """Return the current simulation running state."""
     return simulation_running
 
 def bot_worker(engine, product_list, auction_manager):
+    """Worker function to continuously run a bot."""
     while simulation_running_func():
         bot = create_random_bot(engine, product_list)
         bot.trade(auction_manager, simulation_running_func)
@@ -28,23 +33,23 @@ def main():
     engine = TradingEngine()
     product_names = generate_random_product_names(NUM_PRODUCTS)
 
-    # Start the AuctionManager thread.
+    # Start AuctionManager thread.
     auction_manager = AuctionManager(engine)
     auction_thread = threading.Thread(target=auction_manager.run, args=(simulation_running_func,))
     auction_thread.start()
 
-    # --- Initial Demo: Manual Orders & Auction ---
+    # Initial Demo: Manual Orders & Auction
     from models import Order
-    manual_orders = [
-        Order(order_id="O1", order_type="buy", commodity="Widget", quantity=10, price=50.0),
-        Order(order_id="O2", order_type="sell", commodity="Widget", quantity=5, price=48.0),
-        Order(order_id="O3", order_type="sell", commodity="Widget", quantity=7, price=49.0),
+    demo_orders = [
+        Order("O1", "buy", "Widget", 10, 50.0),
+        Order("O2", "sell", "Widget", 5, 48.0),
+        Order("O3", "sell", "Widget", 7, 49.0),
     ]
-    for order in manual_orders:
+    for order in demo_orders:
         engine.place_order(order)
     engine.match_all()
 
-    # Start an auction demo for Gadget.
+    # Auction demo for Gadget.
     from models import Order as OrderModel
     auction_demo = Auction(OrderModel("A0", "sell", "Gadget", 5, 60.0), duration=5)
     with auction_manager.lock:
@@ -57,7 +62,7 @@ def main():
             auction_manager.active_auctions.pop("Gadget")
     print("Auction demo finalized.")
 
-    # --- Asynchronous Bot Simulation ---
+    # Asynchronous Bot Simulation
     pool_size = POOL_SIZE
     threads = []
     for _ in range(pool_size):
@@ -65,8 +70,7 @@ def main():
         threads.append(t)
         t.start()
 
-    simulation_duration = SIMULATION_DURATION  # seconds
-    time.sleep(simulation_duration)
+    time.sleep(SIMULATION_DURATION)
     simulation_running = False
     engine.cancel_all_orders()
 
@@ -74,7 +78,6 @@ def main():
         t.join()
     auction_thread.join()
 
-    # --- Visualization: One graph tracking all commodities ---
     visualize_all_commodities(engine)
 
 if __name__ == "__main__":
