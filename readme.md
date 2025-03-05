@@ -92,3 +92,6 @@ The simulation runs asynchronously. When the simulation duration ends, a global 
 
 ## Output
 Trade History Graph: At the end of the simulation, a graph (trade_history.png) is generated in the project root (or output/ directory if running in docker) showing the price history for all commodities.
+
+## Upcoming features:
+- Nuitka lto optimization
