@@ -68,6 +68,16 @@ This project is a trading simulation engine that emulates a dynamic, concurrent 
    ```
    POOL_SIZE=200 SIMULATION_DURATION=30 NUM_PRODUCTS=10 docker-compose up --build
    ```
+3. **Running Nuitka Compiled Application in Docker Container**
+   To run the program as a Nuitka compiled python application simply add the following flag:
+   ```
+   DOCKERFILE=dockerfile.compiled
+   ```   
+   ie.
+   ```
+   DOCKERFILE=dockerfile.compiled POOL_SIZE=200 SIMULATION_DURATION=30 NUM_PRODUCTS=10 docker-compose up --build
+   ```
+   
 ## Project Workflow
 - Trading Engine (engine.py): Manages order books, order placement, matching, and trade history.
 - Order Book (order_book.py): Implements matching logic using heaps.

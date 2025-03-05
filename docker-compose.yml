@@ -1,10 +1,10 @@
-# docker-compose.yml
 version: '3.8'
 
 services:
   trading:
     build:
       context: .
+      dockerfile: ${DOCKERFILE:-dockerfile}  # Default to `dockerfile`, but allow `dockerfile.compiled`
       args:
         POOL_SIZE: ${POOL_SIZE:-200}
         SIMULATION_DURATION: ${SIMULATION_DURATION:-120}
@@ -16,8 +16,7 @@ services:
       POOL_SIZE: ${POOL_SIZE:-200}
       SIMULATION_DURATION: ${SIMULATION_DURATION:-120}
       NUM_PRODUCTS: ${NUM_PRODUCTS:-10}
-    command: ["/app/.venv/bin/python main.py | tee /app/output/trading-$(date +'%Y%m%d_%H%M%S').log"]
-
+    command: ["set -x; if [ -f /app/main.dist/main.bin ]; then echo 'RUNNING COMPILED'; exec /app/main.dist/main.bin | tee /app/output/trading-$(date +'%Y%m%d_%H%M%S').log; else echo 'RUNNING UNCOMPILED'; exec /app/.venv/bin/python main.py | tee /app/output/trading-$(date +'%Y%m%d_%H%M%S').log; fi"]
 volumes:
   output:
     driver: local

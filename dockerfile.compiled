@@ -12,6 +12,12 @@ COPY ./*.py /app/
 #Create output folder
 RUN mkdir /app/output
 
+RUN apt-get update && \ 
+    apt-get install -y patchelf \
+    build-essential \
+    gcc
+
+
 #Create client user and switch to it
 RUN useradd -u 1001 -m client
 RUN chown -R client:client /app
@@ -22,8 +28,17 @@ RUN chmod +x scripts/setup.sh
 RUN ./scripts/setup.sh
 RUN chown -R client:client /app/output
 
-#CMD ["./main_dist/main"]
+RUN . /app/.venv/bin/activate && \
+    python -m pip install -U --force-reinstall "https://github.com/Nuitka/Nuitka/archive/factory.zip"
+
+RUN . /app/.venv/bin/activate && \
+    python -m nuitka \
+    --follow-imports \
+    --standalone \
+    main.py
+
+CMD ["./main_dist/main"]
 
 # Command to run the simulation.
 ENTRYPOINT ["bash", "-c"]
-CMD ["/app/.venv/bin/python main.py | tee /app/output/trading.log"]
+#CMD ["/app/.venv/bin/python main.py | tee /app/output/trading.log"]
